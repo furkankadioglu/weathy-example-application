@@ -21,12 +21,6 @@ final class OpenWeatherDataSource implements BaseSource {
     protected City $city;
 
     /**
-     * Requested weather date
-     * @var string
-     */
-    protected string $date;
-
-    /**
      * Base API endpoint
      */
     const BASE_URL = "https://api.openweathermap.org/data";
@@ -36,18 +30,23 @@ final class OpenWeatherDataSource implements BaseSource {
         $this->client = new Client();
     }
 
-    public function setDate(string $date) : self
-    {
-        $this->date = $date;
-        return $this;
-    }
-
+    /**
+     * Set City to Source
+     *
+     * @param City $city
+     * @return self
+     */
     public function setCity(City $city) : self 
     {
         $this->city = $city;
         return $this;
     }
 
+    /**
+     * Fetch data from 3rd Party API
+     *
+     * @return array
+     */
     public function fetch() : array
     {
         $url = $this::BASE_URL."/2.5/weather?lat={$this->city->latitude}&lon={$this->city->longitude}&appid=".config('weathy.openweathermap_key');
