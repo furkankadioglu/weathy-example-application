@@ -15,12 +15,12 @@ class CreateWeatherDataTable extends Migration
     {
         Schema::create('weather_data', function (Blueprint $table) {
             $table->id();
-            $table->integer('city_id')->unsigned()->index();
-            $table->date('date');
+            $table->unsignedBigInteger('city_id');
+            $table->date('date')->index();
             $table->json('data');
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 
