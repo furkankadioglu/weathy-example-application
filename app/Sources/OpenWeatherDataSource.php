@@ -4,7 +4,7 @@ namespace App\Sources;
 use App\Models\City;
 use GuzzleHttp\Client;
 
-final class OpenWeatherDataSource extends BaseSource {
+final class OpenWeatherDataSource implements BaseSource {
 
     /**
      * Guzzle client

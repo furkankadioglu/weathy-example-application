@@ -2,5 +2,5 @@
 namespace App\Sources;
 
 interface BaseSource {
-    public function collect();
+    public function fetch();
 }
