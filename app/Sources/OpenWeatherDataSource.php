@@ -1,6 +1,7 @@
 <?php 
 namespace App\Sources;
 
+use App\Models\City;
 use GuzzleHttp\Client;
 
 final class OpenWeatherDataSource extends BaseSource {
@@ -13,6 +14,13 @@ final class OpenWeatherDataSource extends BaseSource {
     protected Client $client;
 
     /**
+     * City eloquent model
+     * 
+     * @var \App\Models\City
+     */
+    protected City $city;
+
+    /**
      * Requested weather date
      * @var string
      */
@@ -21,7 +29,7 @@ final class OpenWeatherDataSource extends BaseSource {
     /**
      * Base API endpoint
      */
-    const BASE_URL = "https://api.openweathermap.org/data/";
+    const BASE_URL = "https://api.openweathermap.org/data";
 
     public function __construct()
     {
@@ -34,8 +42,19 @@ final class OpenWeatherDataSource extends BaseSource {
         return $this;
     }
 
-    public function fetch()
+    public function setCity(City $city) : self 
     {
+        $this->city = $city;
+        return $this;
+    }
 
+    public function fetch() : array
+    {
+        $url = $this::BASE_URL."/2.5/weather?lat={$this->city->latitude}&lon={$this->city->longitude}&appid=".config('weathy.openweathermap_key');
+
+        $response = $this->client->get($url);
+
+        return json_decode($response->getBody()->getContents(), true);
+        
     }
 }
