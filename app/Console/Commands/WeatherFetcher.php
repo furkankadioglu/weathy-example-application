@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\FetchWeatherDataJob;
+use App\Models\City;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class WeatherFetcher extends Command
@@ -37,6 +40,22 @@ class WeatherFetcher extends Command
      */
     public function handle()
     {
-        return 0;
+
+        $cities = City::all();
+
+        $this->info("[".$this->getNow()."] Fetch process has been started.", 'v');
+
+        $this->withProgressBar($cities, function($city) {
+            FetchWeatherDataJob::dispatch($city);
+        });
+
+        $this->line('');
+        $this->info("[".$this->getNow()."] Fetch process has been completed.", 'v');
+    }
+
+    private function getNow()
+    {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        return $now;
     }
 }
