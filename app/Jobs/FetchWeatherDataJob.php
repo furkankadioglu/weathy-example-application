@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\WeatherData;
 use App\Sources\OpenWeatherDataSource;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -54,6 +55,7 @@ class FetchWeatherDataJob implements ShouldQueue
         if($data["cod"] != Response::HTTP_OK)
         {
             FetchFailed::dispatch($this->city);
+            throw new Exception("Fetch process failed");
         }
 
         $now = Carbon::now();
