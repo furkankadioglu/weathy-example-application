@@ -18,4 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::get("/cities", "App\Http\Controllers\API\CityController@index");
 Route::get("/getWeather", "App\Http\Controllers\API\WeatherController@getWeather");
